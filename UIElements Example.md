@@ -34,6 +34,11 @@ VisualElement是可视化树中所有节点的公共基类。VisualElement基类
 VisualElement有几个子类，它们定义额外的行为和功能，包括专门的控件。VisualElement可能有子元素。
 你不需要从VisualElement基类派生来使用UIElement。您可以通过样式表和事件回调来定制VisualElement的外观和行为。
 
+### Connectivity 连通性
+可视树的根对象称为面板。新元素在连接到面板之前将被忽略。您可以向现有元素添加元素以将用户界面附加到面板。
+要验证`VisualElement`是否连接到面板，可以测试该元素的面板属性。当可视化元素没有连接时，测试返回`null`。
+注意:当UIElements是实验性的，你必须通过` UnityEditor.Experimental.UIElements`命名空间中的`GetRootVisualContainer()`扩展方法。。此名称空间用于防止意外使用此属性。
+
 ### 绘图顺序
 可视化树中的元素是按照以下顺序绘制的:
 - 父元素是在其子元素之前绘制的。
