@@ -36,13 +36,16 @@ VisualElement有几个子类，它们定义额外的行为和功能，包括专�
 
 ### Connectivity 连通性
 可视树的根对象称为面板。新元素在连接到面板之前将被忽略。您可以向现有元素添加元素以将用户界面附加到面板。
+
 要验证`VisualElement`是否连接到面板，可以测试该元素的面板属性。当可视化元素没有连接时，测试返回`null`。
+
 注意:当UIElements是实验性的，你必须通过` UnityEditor.Experimental.UIElements`命名空间中的`GetRootVisualContainer()`扩展方法。。此名称空间用于防止意外使用此属性。
 
 ### 绘图顺序
 可视化树中的元素是按照以下顺序绘制的:
 - 父元素是在其子元素之前绘制的。
 - 子元素是根据其兄弟姐妹列表绘制的。
+
 更改其绘图顺序的唯一方法是对父级中的VisualElementObjects重新排序。
 
 通过设置 **visualElement.clippingOptions=clippingOptions.clipAndCacheContents**，可以在RenderTexture中绘制子树，并为将来的重新绘制事件重新使用像素。
@@ -72,7 +75,24 @@ VisualElement有几个子类，它们定义额外的行为和功能，包括专�
 
 - `ChangeCoordinatesTo`将`vector2`或`Rect`从一个元素的局部空间转换为另一个元素的局部空间。 
 
+![layout example](https://docs.unity3d.com/2019.1/Documentation/uploads/Main/visualtree-hierarchy.png)
+For example, in the image above, the tree is arranged as follows:
+    - Panel
+        - Tab section (refered to as DockArea and labelled “Coordinates”)
+            - Blue VisualElement acts as the root (refered to as “root container”)
+                - Red VisualElement acts as a parent of the button (“red container”)
+                    - Button
 
+From the point of view of the panel:
+
+- The origin of the panel is (0, 0) regardless of the referential
+- The origin of the root is (0, 22) in world space
+- The origin of the red container is (100, 122) in world space. Its position property (defined in layout property) is set as (100, 100) because it is relative to its parent: the root container.
+- The origin of the button is (100, 122) in the world space. Its position property (defined in layout property) is set as (0, 0) because it is relative to its parent: the red container.
+
+The origin of an element is its top left corner.
+
+Use the worldBound property to retrieve the window space coordinates of the VisualElement, taking into account the transforms and positions of its ancestry. 
 ### 布局引擎
 UIElements包括一个布局引擎，它根据布局和样式属性定位视觉元素。布局引擎是一个Yoga开源项目，它实现了flexbox的一个子集：一个HTML/CSS布局系统。
 
