@@ -1,12 +1,12 @@
 # Unity - UIElements
 [官方文档传送门](https://docs.unity3d.com/2019.1/Documentation/Manual/UIElements.html)
-##### UIElements开发者指南
+### UIElements开发者指南
 Unity编辑器用户界面主要是围绕即时模式UI系统构建的。虽然IMGUI在某些上下文中工作得很好，但它也有一些严重的设计限制，这些限制会影响开发编辑器特性和扩展的每个人的工作效率。
 这就是创建UIElement的动机。UIElement是一个retained-mode(保留模式)的UI系统，它打开了提高性能的大门，提供了样式表、动态/上下文事件处理、可访问性和数据持久性。
 UIElements中的许多概念都基于公认的Web技术。如果您熟悉XML、CSS、JQuery、HTML DOM和DOM事件系统，那么您可能已经熟悉了许多UIElements概念。
 本指南的目标是通过描述框架背后的概念以及向您提供有关如何使用UIElements构建交互用户界面（UI）的清晰解释，帮助您利用UIElements。
 
-##### 选择一个UI工具
+### 选择一个UI工具
 Unity提供了三种用户接口(UI)工具。你应该基于你对以下问题的答案选择一个UI工具：
 - 你是为游戏开发还是为编辑开发？
 - 如果您正在开发一款游戏，用户界面是否会随游戏一起提供？
@@ -19,22 +19,22 @@ Unity提供了三种用户接口(UI)工具。你应该基于你对以下问题�
 
 UIElements已经准备好成为游戏和编辑器用户界面开发的首选工具包。
 
-##### 免责声明
+### 免责声明
 
 UIElements是一个实验特性：它是不完整的，并且会受到api中断更改的影响。UIElements仍在积极开发中。
 此外，在2018.3中对UIElements的更改将不会返回到旧版本。如果升级，还必须从以前的Unity版本升级一些元素。
 
-##### 视觉树
+### 视觉树
 可视化树包含窗口中的所有可视化元素。它是一个由轻量级节点(称为可视化元素)组成的对象图。
 这些节点在C#堆上分配，可以手动分配，也可以从UXML模板文件加载UXML资源。
 每个节点都包含布局信息、其绘图和重绘选项以及节点如何响应事件。
 
-##### 视觉元素
+### 视觉元素
 VisualElement是可视化树中所有节点的公共基类。VisualElement基类包含样式、布局数据、本地转换、事件处理程序等属性。
 VisualElement有几个子类，它们定义额外的行为和功能，包括专门的控件。VisualElement可能有子元素。
 你不需要从VisualElement基类派生来使用UIElement。您可以通过样式表和事件回调来定制VisualElement的外观和行为。
 
-##### 绘图顺序
+### 绘图顺序
 可视化树中的元素是按照以下顺序绘制的:
 - 父元素是在其子元素之前绘制的。
 - 子元素是根据其兄弟姐妹列表绘制的。
@@ -43,7 +43,7 @@ VisualElement有几个子类，它们定义额外的行为和功能，包括专�
 通过设置 **visualElement.clippingOptions=clippingOptions.clipAndCacheContents**，可以在RenderTexture中绘制子树，并为将来的重新绘制事件重新使用像素。
 
 
-##### 位置、变换和坐标系
+### 位置、变换和坐标系
 
 不同的坐标系定义如下：
 
@@ -74,7 +74,7 @@ localtoworld将vector2或rect转换为面板空间引用
 changecoordinatesto将vector2或rect从一个元素的局部空间转换为另一个元素的局部空间。 
 
 
-##### 布局引擎
+### 布局引擎
 UIElements包括一个布局引擎，它根据布局和样式属性定位视觉元素。布局引擎是一个Yoga开源项目，它实现了flexbox的一个子集：一个HTML/CSS布局系统。
 
 要开始使用Yoga和FlexBox，请咨询以下外部资源：
@@ -112,7 +112,7 @@ If an element has its layout.position property assigned by the API, the element 
 - 使用绝对定位相对于其父位置矩形放置元素。在这种情况下，它不会影响其兄弟或父级的布局。
 - 如果元素具有由API分配的layout.position属性，则该元素将自动设置为absolute。 
 
-##### 编写UXML模板
+### 编写UXML模板
 UXML模板是使用定义用户界面逻辑结构的XML标记编写的文本文件。下面的代码示例展示了如何定义一个提示用户做出选择的简单面板
 
 ```xml
@@ -176,7 +176,7 @@ UXML模板示例没有定义用户界面的可视方面。作为最佳实践，�
 
 有一个单独的文件，样式规则用USS编写（参见样式）。
 
-##### 重用UXML
+### 重用UXML
 您可以通过在一个uxml文件中定义它来创建组件，并使用另一个uxml文件中的<template>和<instance>元素导入它。
 
 在设计大型用户界面时，可以创建定义UI部分的模板UXML文件。
@@ -249,3 +249,55 @@ slots["title"].add(new Label());
 ```
 
 在调用CloneTree之后，slot字典保存一个slot名称到slot VisualElement的映射。您可以使用它作为插槽的子元素添加可视元素。
+
+### 从C#加载UXML
+
+要从UXML模板构建用户界面，必须首先将模板加载到VisualTreeAsset中
+```c#
+var template = EditorGUIUtility.Load("path/to/file.uxml") as VisualTreeAsset;
+```
+然后您可以构建它所表示的可视化树，并将其附加到父元素
+```C#
+template.CloneTree(parentElement, slots);
+```
+在上面的语句中，模板中的<UXML>元素没有转换为一个`VisualElement`。相反，它的所有子元素都附加到`parentElement`指定的元素。
+一旦模板被实例化，就可以使用 UQuery:Unity 的 JQuery/Linq 实现从可视元素树中检索特定元素。
+例如，下面的代码演示了如何创建一个新的`EditorWindow`并加载一个UXML文件作为其内容：
+```c#
+public class MyWindow : EditorWindow  {
+    [MenuItem ("Window/My Window")]
+    public static void  ShowWindow () {
+        EditorWindow w = EditorWindow.GetWindow(typeof(MyWindow));
+
+        VisualTreeAsset uiAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/MyWindow.uxml");
+        VisualElement ui = uiAsset.CloneTree(null);
+
+        w.GetRootVisualContainer().Add(ui);
+    }
+
+    void OnGUI () {
+        // Nothing to do here, unless you need to also handle IMGUI stuff.
+    }
+}
+```
+
+### UXML 元素参考
+
+本主题详细介绍了`UnityEngine.Experimental.UIElements`中可用的UXML元素和`UnityEditor.Experimental.UIElements`命名空间。
+
+#####基础元素
+
+VisualElement
+所有视觉元素的基类。
+- 在`UnityEngine.Experimental.UIElements`中。
+- 允许的子元素:任意数量的`VisualElement`。
+- 属性：
+    - class：以空格分隔的名称的列表。
+    - style：用于对元素进行样式化的USS指令。
+    - name：此元素的唯一字符串标识符。
+    - focus-index：用于确定制表时焦点顺序的整数;默认值是-1，意味着元素不可调焦。
+    - picking-mode：Position 或 Ignore; 默认值是 Position。
+    - tooltip: 鼠标悬停元素时显示的字符串。
+    - slot-name: 将此元素定义为槽。
+    - slot: 当元素位于<Instance>内时，将元素移动到此属性引用的槽内
+    - also accept any other attribute
