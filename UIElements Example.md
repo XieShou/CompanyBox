@@ -112,6 +112,33 @@ If an element has its layout.position property assigned by the API, the element 
 - 使用绝对定位相对于其父位置矩形放置元素。在这种情况下，它不会影响其兄弟或父级的布局。
 - 如果元素具有由API分配的layout.position属性，则该元素将自动设置为absolute。 
 
+### UXML格式
+UXML文件是定义用户界面逻辑结构的文本文件。UXML文件中使用的格式受到HTML(超文本标记语言)、XAML(可扩展应用程序标记语言)和XML(可扩展标记语言)的启发。如果您熟悉这些公认的格式，您应该会注意到UXML中的许多相似之处。然而，UXML格式包含了一些细微的差异，从而提供了一种使用Unity的有效方法。
+本节描述Unity支持的UXML格式，并提供有关编写、加载和定义UXML模板的详细信息。它还包括关于定义新元素以及如何使用UQuery的信息。
+UXML使得不太懂技术的用户更容易在Unity中构建用户界面。UXML允许您这样做:
+- 用XML定义用户界面(UI)的结构。
+- 使用USS样式表定义UI布局。
+
+这使得开发人员需要完成技术任务，例如导入资源、定义逻辑和处理数据。
+
+### 定义新元素
+UIElements是可扩展的。您可以定义自己的用户界面组件和元素。
+但是在使用UXML文件定义新元素之前，必须从VisualElement或其子类派生一个新类，然后在这个新类中实现适当的功能。新类必须实现默认构造函数。
+例如，下面的代码派生新的StatusBar类并实现其默认构造函数：
+```c#
+class StatusBar : VisualElement
+{
+    public StatusBar()
+    {
+        m_Status = String.Empty;
+    }
+
+    string m_Status;
+    public string status { get; }
+}
+```
+为了让UIElement能够在读取UXML文件时实例化一个新类，必须为类定义一个工厂。除非您的工厂需要做一些特殊的事情，否则您可以从`UxmlFactoy<T>`派生工厂。还建议将工厂类放在组件类中。
+例如，下面的代码演示了如何通过从UxmlFactory&lt;T&gt;派生StatusBar类的工厂来为其定义工厂。工厂被命名为工厂
 ### 编写UXML模板
 UXML模板是使用定义用户界面逻辑结构的XML标记编写的文本文件。下面的代码示例展示了如何定义一个提示用户做出选择的简单面板
 
@@ -195,7 +222,9 @@ UXML模板示例没有定义用户界面的可视方面。作为最佳实践，�
     </engine:VisualElement>
 </engine:UXML>
 ```
+
 您可以像这样将纵向组件嵌入到其他UXML模板中
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <engine:UXML ...>
@@ -280,24 +309,17 @@ public class MyWindow : EditorWindow  {
     }
 }
 ```
+### UQuery
+UQuery提供了一组扩展方法，用于从任何UIElements可视化树中检索元素。UQuery基于JQuery或Linq，但UQuery的设计目的是尽可能限制动态内存分配。这允许在moble平台上实现最佳性能。
+要使用UQuery检索元素，请使用`UQueryExtensions.Q`或使用`UQueryExtensions.Query`初始化`QueryBuilder`。
+例如，下面的UQuery从根目录开始，找到第一个名为`foo`的`Button`。
 
-### UXML 元素参考
+```c#
+root.Query<Button>("foo").First();
+```
 
-本主题详细介绍了`UnityEngine.Experimental.UIElements`中可用的UXML元素和`UnityEditor.Experimental.UIElements`命名空间。
+下面的UQuery在同一组中对每个名为`foo`的`Button`进行迭代:
 
-#####基础元素
-
-VisualElement
-所有视觉元素的基类。
-- 在`UnityEngine.Experimental.UIElements`中。
-- 允许的子元素:任意数量的`VisualElement`。
-- 属性：
-    - class：以空格分隔的名称的列表。
-    - style：用于对元素进行样式化的USS指令。
-    - name：此元素的唯一字符串标识符。
-    - focus-index：用于确定制表时焦点顺序的整数;默认值是-1，意味着元素不可调焦。
-    - picking-mode：Position 或 Ignore; 默认值是 Position。
-    - tooltip: 鼠标悬停元素时显示的字符串。
-    - slot-name: 将此元素定义为槽。
-    - slot: 当元素位于<Instance>内时，将元素移动到此属性引用的槽内
-    - also accept any other attribute
+```
+root.Query("foo").Children<Button>().ForEach(//do stuff);
+```
