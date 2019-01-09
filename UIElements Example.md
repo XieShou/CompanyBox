@@ -88,21 +88,6 @@ UIElements包括一个布局引擎，它根据布局和样式属性定位视觉�
 
 UI元素包括标准UI控件（如按钮、切换、文本字段或标签）的内置控件。这些内置控件具有影响其布局的样式。
 
-
-The following list provides tips on how to use the layout engine:
-
-Set the width and height to define the size of an element.
-
-Use the flexGrow property (in USS: flex-grow: <value>;) to assign a flexible size to an element. The value of the flexGrow property acts as weighting when the size of an element is determined by its siblings.
-
-Set the flexDirection property to row (in USS: flex-direction: row;) to switch to a horizontal layout.
-
-Use relative positioning to offset an element based on its original layout position.
-
-Use absolute positioning to place an element relative to its parent position rectangle. In this case, it does not affect the layout of its siblings or parent
-
-If an element has its layout.position property assigned by the API, the element is automatically set to absolute.
-
 以下列表提供了有关如何使用布局引擎的提示：
 
 - 设置宽度和高度以定义元素的大小。
@@ -138,7 +123,161 @@ class StatusBar : VisualElement
 }
 ```
 为了让UIElement能够在读取UXML文件时实例化一个新类，必须为类定义一个工厂。除非您的工厂需要做一些特殊的事情，否则您可以从`UxmlFactoy<T>`派生工厂。还建议将工厂类放在组件类中。
-例如，下面的代码演示了如何通过从UxmlFactory&lt;T&gt;派生StatusBar类的工厂来为其定义工厂。工厂被命名为工厂
+例如，下面的代码演示了如何通过从`UxmlFactory<T>`;派生StatusBar类的工厂来为其定义工厂。工厂被命名为`Factory`。
+```C#
+class StatusBar : VisualElement
+{
+    public new class Factory : UxmlFactory<StatusBar> {}
+
+    // ...
+}
+```
+定义了这个工厂之后，您就可以在UXML文件中使用<StatusBar>元素了。
+注:工厂在2018.2得到改善。如果您在以前的版本中定义了工厂，您应该将它们移植到2018.3，以避免现在已经过时的API。
+
+### 在元素上定义属性
+您可以为新类定义UXML特征，并将其工厂设置为使用这些特征。例如，下面的代码演示了如何定义UXML traits类来初始化`status`属性作为`StatusBar`类的属性。status属性是从XML数据初始化的。
+```c#
+class StatusBar : VisualElement
+{
+    public new class Factory : UxmlFactory<StatusBar, UxmlTraits> {}
+
+    public new class Traits : base.UxmlTraits
+    {
+        UxmlStringAttributeDescription m_Status = new UxmlStringAttributeDescription { name = "status" };
+
+        public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+        {
+            get { yield break; }
+        }
+
+        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+        {
+            base.Init(ve, bag, cc);
+            ((StatusBar)ve).status = m_Status.GetValueFromBag(bag, cc);
+        }
+    }
+
+    // ...
+}
+```
+
+`UxmlTraits `有两个用途：
+- 工厂使用它来初始化新创建的对象。
+- 它通过模式生成过程进行分析，以获取有关元素的信息。这些信息被转换成XML模式指令。
+
+上面的代码示例执行以下操作：
+- `m_Status`声明定义了名为status的XML属性。
+- UxmlChildElementsDescription返回一个空的IEnumerable，指示statusBar元素没有子元素，
+- init（）成员从XML解析器读取属性包中status属性的值，并将statusbar.status属性设置为该值。
+- 通过将UxmlTraits类放在statusBar类中，允许init（）方法访问statusBar的私有成员。
+- 新的uxmltraits类继承自基类uxmltraits，因此它共享基类的属性。
+- init（）调用base.init（）初始化基类属性。
+
+上面的代码示例声明了一个具有`UxmlStringAttributeDescription`类的字符串属性。UIElements 支持以下类型的属性，并且每个属性都将C#类型链接到XML类型：
+- UxmlStringAttributeDescription:属性值是`string`字符串。
+- UxmlFloatAttributeDescription:属性值必须是C# `float`类型范围内的单精度浮点值。
+- UxmlDoubleAttributeDescription:属性值必须是C# `Double`类型范围内的双精度浮点值。
+- UxmlIntAttributeDescription:属性值必须是C# `int`类型范围内的整数值。
+- UxmlLongAttributeDescription:属性值必须是C# `long`类型范围内的长整数值。
+- UxmlBoolAttributeDescription:属性值必须为`true`或`false`。
+- UxmlColorAttributeDescription:属性值必须是表示颜色（#ffffff）的字符串。
+- UxmlEnumAttributeDescription<T>:属性值必须是表示`Enum`类型`T`的值之一的字符串。
+
+在上面的代码示例中，`uxmlChildElementsDescription` 返回一个空的`IEnumerable`，表示`StatusBar`元素不接受子元素。
+要让元素接受任何类型的子元素，必须覆盖`uxmlChildElementsDescription`属性。例如，要使`StatusBar`元素接受任何类型的子元素，必须按照以下方式指定`uxmlChildElementsDescription`属性:
+```c#
+public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+{
+    get
+    {
+        yield return new UxmlChildElementDescription(typeof(VisualElement));
+    }
+}
+```
+
+### Defining a namespace prefix 定义名称空间前缀
+一旦您在C#中定义了一个新元素，就可以开始在UXML文件中使用该元素。如果新元素是在新命名空间中定义的，则应为该命名空间定义前缀。命名空间前缀声明为根`<UXML>`元素的属性，并在范围元素时替换完整的命名空间名称。
+
+要定义名称空间前缀，请为要定义的每个名称空间前缀向程序集添加一个`UxmlNamespacePrefix`属性。
+```c#
+[assembly: UxmlNamespacePrefix("My.First.Namespace", "first")]
+[assembly: UxmlNamespacePrefix("My.Second.Namespace", "second")]
+```
+这可以在程序集的任何C#文件的root根级别（在任何命名空间之外）完成。
+
+模式生成系统执行以下操作：
+- 检查这些属性并使用它们来生成模式。
+- 将命名空间前缀定义添加为新创建的uxml文件中的<uxml>元素的属性。
+
+在其`xsi:schemaLocation`属性中包含命名空间的架构文件位置。
+
+您应该更新项目的UXML模式。选择 `Assets > Update UIElements`模式以确保文本编辑器识别新元素。
+
+### Advanced usage
+您可以通过重写其`IUxmlFactory.uxmlName`和`IUXmlFactory.uxmlQualifiedName`属性来自定义UXML名称。确保`uxmlName`在您的命名空间中是唯一的，并且`uxmlQualifiedName`在您的项目中是唯一的。
+
+如果这两个名称不是惟一的，则在尝试加载程序集时将引发异常。
+
+下面的代码示例演示如何覆盖和自定义UXML名称：
+```c#
+public class FactoryWithCustomName : UxmlFactory<..., ...>
+{
+    public override string uxmlName
+    {
+        get { return "UniqueName"; }
+    }
+
+    public override string uxmlQualifiedName
+    {
+        get { return uxmlNamespace + "." + uxmlName; }
+    }
+}
+```
+### 为元素选择工厂
+默认情况下，`IUxmlFactory`实例化一个元素，并使用该元素的名称选择该元素。
+
+通过重写`IUXmlFactory.AcceptsAttributeBag`，可以使选择过程考虑元素上的属性值。然后，工厂将检查元素属性，以确定它是否可以为UXML元素实例化对象。
+
+例如，如果`VisualElement`类是泛型的，那么这很有用。在这种情况下，类专门化的类工厂可以检查XML `type`属性的值。根据值的不同，可以接受或拒绝实例化。有关示例，请参见PropertyControl<T>的实现。
+
+如果一个以上的工厂可以实例化一个元素，则选择第一个已注册的工厂。
+
+### 覆盖基类属性的默认值
+可以通过在派生的`UxmlTraits`类中设置属性的`defaultValue`来更改基类中声明的属性的默认值。
+例如，下面的代码展示了如何设置`m_focusIndex`的默认值的更改：
+```C#
+class MyElementTraits : VisualElementUxmlTraits
+    {
+        public Traits()
+        {
+            m_focusIndex.defaultValue = 0;
+        }
+    }
+```
+
+### 接受任何属性
+默认情况下，生成的XML模式声明元素可以具有任何属性。
+
+属性的值（`UxmlTraits`类中声明的属性除外）不受限制。这与检查已声明属性的值是否与其声明匹配的XML验证器不同。
+
+其他属性包含在传递给 `IUxmlFactory.AcceptsAttributBag()` 和 `IUxmlFactory.Init()` 函数的 `IUxmlAttributes` 包中。是否使用这些附加属性取决于工厂实现。默认行为是丢弃附加属性。
+
+这意味着这些附加属性不会附加到实例化的VisualElement上，并且这些属性不能通过`UQuery`进行查询。
+
+定义新元素时，可以通过在`UxmlTraits`构造函数中将`UxmlTraits.canHaveAnyAttribute`属性设置为`false`，将接受的属性限制为显式声明的属性。
+
+### 使用模式定义
+模式定义文件指定属性以及每个UXML元素可以包含哪些子元素。使用模式定义文件作为编写正确文档和验证文档的指南。
+
+
+在UXML模板文件中，`<UXML>`根元素的 `xsi:noNamespaceSchemaLocation` 和 `xsi:schemaLocation` 属性指定架构定义文件的位置。
+
+
+选择 **Assets > Create > UIElements View** 菜单项，使用从项目使用的 `VisualElement` 子类收集的最新信息自动更新架构定义。要强制更新UXML模式文件，请选择 **Assets > Update UIElements Schema**。
+
+
+注意：某些文本编辑器无法识别` xsi:noNamespaceSchemaLocation`属性。如果文本编辑器找不到架构定义文件，则还应指定`xsi:schemaLocation`属性。
 ### 编写UXML模板
 UXML模板是使用定义用户界面逻辑结构的XML标记编写的文本文件。下面的代码示例展示了如何定义一个提示用户做出选择的简单面板
 
