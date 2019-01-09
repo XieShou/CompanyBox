@@ -11,10 +11,11 @@ Unity提供了三种用户接口(UI)工具。你应该基于你对以下问题�
 - 你是为游戏开发还是为编辑开发？
 - 如果您正在开发一款游戏，用户界面是否会随游戏一起提供？
 
-|              | Runtime dev UI  | Runtime game UI  | Editor |
-|IMGUI          | for debugging   | not recommmended | ✔ |
-|UGUI           | ✔               | ✔               | not available| 
-|UIElements     | 2019.x          | 2020.x           | 2019.1|
+|            | Runtime dev UI | Runtime game UI  | Editor        |
+| ---------- | -------------- | ---------------- | ------------- |
+| IMGUI      | for debugging  | not recommmended | ✔             |
+| UGUI       | ✔              | ✔                | not available |
+| UIElements | 2019.x         | 2020.x           | 2019.1        |
 
 UIElements已经准备好成为游戏和编辑器用户界面开发的首选工具包。
 
