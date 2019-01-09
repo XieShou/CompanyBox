@@ -78,11 +78,11 @@ VisualElement有几个子类，它们定义额外的行为和功能，包括专�
 ![layout example](https://docs.unity3d.com/2019.1/Documentation/uploads/Main/visualtree-hierarchy.png)
 
 For example, in the image above, the tree is arranged as follows:
-    - Panel
-        - Tab section (refered to as DockArea and labelled “Coordinates”)
-            - Blue VisualElement acts as the root (refered to as “root container”)
-                - Red VisualElement acts as a parent of the button (“red container”)
-                    - Button
+- Panel
+    - Tab section (refered to as DockArea and labelled “Coordinates”)
+        - Blue VisualElement acts as the root (refered to as “root container”)
+            - Red VisualElement acts as a parent of the button (“red container”)
+                - Button
 
 From the point of view of the panel:
 
