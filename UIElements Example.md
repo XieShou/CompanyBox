@@ -51,27 +51,21 @@ VisualElement有几个子类，它们定义额外的行为和功能，包括专�
 
 局部：坐标是相对于元素本身的。
 
+布局系统为每个元素计算`VisualElement.layout`属性（类型`Rect`）。
 
-布局系统为每个元素计算VisualElement.layout属性（类型rect）。
+`layout.position`以相对于其父级坐标空间的像素表示。尽管可以直接为`layout.position`指定值，但建议使用样式表和布局系统来定位元素。
 
+每个`VisualElement`还具有一个`layout.transform`属性（type`ITransform`），该属性相对于其父元素定位一个元素。默认情况下，`transform `是标识。
 
-layout.position以相对于其父级坐标空间的像素表示。尽管可以直接为layout.position指定值，但建议使用样式表和布局系统来定位元素。
+`VisualElement.layout.position`和`VisualElement.layout.transform`属性定义如何在本地坐标系和父坐标系之间进行转换。
 
+`VisualElementExtensions`静态类提供以下扩展方法，用于在坐标系之间转换点和矩形：
 
-每个VisualElement还具有一个layout.transform属性（typeitransform），该属性相对于其父元素定位一个元素。默认情况下，转换是标识。
+- `WorldToLocal`将`vector2`或`Rect`从`Panel`空间转换为元素内的引用。
 
+- `LocalToWorld`将`vector2`或`Rect`转换为`Panel`空间引用
 
-VisualElement.layout.position和VisualElement.layout.Transform属性定义如何在本地坐标系和父坐标系之间进行转换。
-
-
-VisualElementExtensions静态类提供以下扩展方法，用于在坐标系之间转换点和矩形：
-
-
-worldtoolocal将vector2或rect从面板空间转换为元素内的引用。
-
-localtoworld将vector2或rect转换为面板空间引用
-
-changecoordinatesto将vector2或rect从一个元素的局部空间转换为另一个元素的局部空间。 
+- `ChangeCoordinatesTo`将`vector2`或`Rect`从一个元素的局部空间转换为另一个元素的局部空间。 
 
 
 ### 布局引擎
@@ -270,12 +264,9 @@ class MyElementTraits : VisualElementUxmlTraits
 ### 使用模式定义
 模式定义文件指定属性以及每个UXML元素可以包含哪些子元素。使用模式定义文件作为编写正确文档和验证文档的指南。
 
-
 在UXML模板文件中，`<UXML>`根元素的 `xsi:noNamespaceSchemaLocation` 和 `xsi:schemaLocation` 属性指定架构定义文件的位置。
 
-
 选择 **Assets > Create > UIElements View** 菜单项，使用从项目使用的 `VisualElement` 子类收集的最新信息自动更新架构定义。要强制更新UXML模式文件，请选择 **Assets > Update UIElements Schema**。
-
 
 注意：某些文本编辑器无法识别` xsi:noNamespaceSchemaLocation`属性。如果文本编辑器找不到架构定义文件，则还应指定`xsi:schemaLocation`属性。
 ### 编写UXML模板
