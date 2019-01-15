@@ -123,13 +123,13 @@ public class Demo2 : EditorWindow
 ```
 
 ### UXML
-##### 自定义VisualElement
+##### 1. 自定义VisualElement
 
 [官方传送门](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-UXML.html)
 
 可以实现自定义的组件，到UXML中进行智能提示
 下面的代码演示了如何定义UXML traits类来初始化status属性作为StatusBar类的属性。status属性是从XML数据初始化的。
-##### 从C#加载UXML
+##### 2. 从C#加载UXML
 
 ```c#
 public class MyWindow : EditorWindow  {
@@ -144,9 +144,9 @@ public class MyWindow : EditorWindow  {
     }
 }
 ```
-##### [UXML参考](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-ElementRef.html)
+##### 3. [UXML参考](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-ElementRef.html)
 
-##### UQuery
+##### 4. UQuery
 UQuery提供了一组扩展方法，用于从任何UIElements可视化树中检索元素。
 UQuery基于JQuery或Linq，但UQuery的设计目的是尽可能限制动态内存分配。
 这允许在moble平台上实现最佳性能。
