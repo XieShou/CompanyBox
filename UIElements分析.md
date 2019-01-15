@@ -60,8 +60,9 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 
 可以在 **Project** 窗口的 **Create** 中找到 **UIElement Editor Window**，在文本框输入文件名后，就会在Editor文件夹目录下创建 `.cs`、`.uxml`、`.uss`三个文件。
 
-![UIElement Editor Window]()
+![UIElement Editor Window](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElement%20Editor%20Window.png)
 
+---
 
 ### UXML
 
