@@ -36,6 +36,10 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 - USS：定义UI布局，形成style。
 - C#代码：负责主要逻辑，并且加载UXML和USS文件。
 
+> This leaves developers to do technical tasks, such as importing assets
+, defining logic, and processing data. 
+这使得开发人员需要完成技术任务，例如导入资源、定义逻辑和处理数据。
+
 > PS：个人猜测官网希望的正常开发流程：
 > 1. 通过加载UXML文件创建出视觉树中的各元素。
 > 2. 将USS文件中的style应用到视觉树中的最上层root节点，style会自动向下同步。
@@ -46,7 +50,7 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 
 ![UIElements Debugger窗口](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElements%20Debugger.png)
 
-其中的每一个节点都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
+一颗树由很多节点组成，每一个节点都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
 
 这也意味着，可以通过继承`VisualElements`类的方式来拓展出自己想要的控件。
 
@@ -118,7 +122,46 @@ public class Demo2 : EditorWindow
 }
 ```
 
-
 ### UXML
+##### 自定义VisualElement
 
+[官方传送门](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-UXML.html)
+
+可以实现自定义的组件，到UXML中进行智能提示
+下面的代码演示了如何定义UXML traits类来初始化status属性作为StatusBar类的属性。status属性是从XML数据初始化的。
+##### 从C#加载UXML
+
+```c#
+public class MyWindow : EditorWindow  {
+    [MenuItem ("Window/My Window")]
+    public static void  ShowWindow () {
+        EditorWindow w = EditorWindow.GetWindow(typeof(MyWindow));
+
+        VisualTreeAsset uiAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/MyWindow.uxml");
+        VisualElement ui = uiAsset.CloneTree(null);
+
+        w.GetRootVisualContainer().Add(ui);
+    }
+}
+```
+##### [UXML参考](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-ElementRef.html)
+
+##### UQuery
+UQuery提供了一组扩展方法，用于从任何UIElements可视化树中检索元素。
+UQuery基于JQuery或Linq，但UQuery的设计目的是尽可能限制动态内存分配。
+这允许在moble平台上实现最佳性能。
+
+要使用UQuery检索元素，请使用 `UQueryExtensions.Q` 或使用 `UQueryExtensions.Query` initialize一个 `QueryBuilder` 。
+
+例如，下面的UQuery从根目录开始，找到第一个名为foo的按钮:
+
+```C#
+root.Query<Button>("foo").First();
+```
+
+以下uquery在同一组中对每个名为foo的按钮进行迭代：
+
+```C#
+root.Query("foo").Children<Button>().ForEach(//do stuff);
+```
 ### USS
