@@ -37,7 +37,7 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 ##### 2. 视觉树
 首先，我们可以从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
 
-![UIElements Debugger窗口]()
+![UIElements Debugger窗口](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElements%20Debugger.png)
 
 其中的每一个节点都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
 
@@ -49,8 +49,8 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 
 这里我修改官方案例 **Example_3** 的代码，用`VisualElements`替换`VisualContainer`，如下图32、33行，
 
-![修改代码]()
+![修改代码](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/Example_3.png)
 
 这样我们就可以在Debugger窗口中看到下图中的树状结构。
 
-![Example_3 Tree]()
+![Example_3 Tree](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/Example_3_tree.png)
