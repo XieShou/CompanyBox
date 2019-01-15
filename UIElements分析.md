@@ -35,22 +35,34 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 - C#代码：负责主要逻辑，并且加载UXML和USS文件。
   
 ##### 2. 视觉树
-首先，我们可以从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
+首先，从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
 
 ![UIElements Debugger窗口](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElements%20Debugger.png)
 
 其中的每一个节点都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
 
-这也意味着，我们可以通过继承`VisualElements`来拓展出自己想要的控件。
+这也意味着，可以通过继承`VisualElements`类的方式来拓展出自己想要的控件。
 
 `VisualElements`可以通过`VisualElements.Add(new VisualElements())`函数来形成树状的结构。
 
 `VisualContainer`是`VisualElements`的容器，可以尝试用`VisualContainer`来替代`VisualElements`，这样子元素就不会显示在Debugger窗口中。
 
-这里我修改官方案例 **Example_3** 的代码，用`VisualElements`替换`VisualContainer`，如下图32、33行，
+尝试修改官方案例 **Example_3** 的代码，用`VisualElements`替换`VisualContainer`，如下图32、33行，
 
 ![修改代码](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/Example_3.png)
 
-这样我们就可以在Debugger窗口中看到下图中的树状结构。
+可以在Debugger窗口中看到下图中的树状结构。
 
 ![Example_3 Tree](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/Example_3_tree.png)
+
+##### 3. 快速开始：UIElement Editor Window ~~~
+在`Assets`文件夹的目录下创建一个Editor文件夹，Unity将自动检测到这个文件夹。
+
+可以在 **Project** 窗口的 **Create** 中找到 **UIElement Editor Window**，在文本框输入文件名后，就会在Editor文件夹目录下创建 `.cs`、`.uxml`、`.uss`三个文件。
+
+![UIElement Editor Window]()
+
+
+### UXML
+
+### USS
