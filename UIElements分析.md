@@ -21,11 +21,20 @@ UIElements     | 2019.x          | 2020.x           | 2019.1
 UIElements已经准备好成为游戏和编辑器用户界面开发的首选工具包。
 ---
 
-### 简要说明
+### 分析
+##### 1. 简要说明
 Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGUI和UGUI，实现Unity引擎在UI内容开发的流程和方法上的统一。
 
 大致可以分为3个部分：
-- C#：
-- UXML：
-- USS：
+- UXML：定义用户界面（UI）的结构。
+- USS：定义UI布局，形成style。
+- C#代码：负责主要逻辑，并且加载UXML和USS文件。
+  
+##### 2. 视觉树
+首先，我们可以从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
 
+其中的每一个节点都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
+
+这也意味着，我们可以通过继承`VisualElements`来拓展出自己想要的控件。
+
+`VisualElements`可以通过`VisualElements.Add(new VisualElements())`函数来形成树状的结构。
