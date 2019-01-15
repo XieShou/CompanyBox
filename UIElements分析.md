@@ -42,15 +42,17 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 
 > PS：个人猜测官网希望的正常开发流程：
 > 1. 通过加载UXML文件创建出视觉树中的各元素。
-> 2. 将USS文件中的style应用到视觉树中的最上层root节点，style会自动向下同步。
-> 3. 而C#更多的负责UXML、USS配置文件的加载和逻辑的处理，而不是创建节点和节点的布局。
+> 2. 将USS文件中的style应用到视觉树中的最上层root元素，style会自动向下同步。
+> 3. 而C#更多的负责UXML、USS配置文件的加载和逻辑的处理，而不是创建元素和元素的布局。
 
 #### 2. 视觉树
 首先，从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
 
 ![UIElements Debugger窗口](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElements%20Debugger.png)
 
-一颗树由很多节点组成，每一个节点都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
+用户界面的定义在根目录中。UI定义是一系列嵌套的XML元素，每个元素表示一个VisualElement。
+
+每一个元素都是一个继承`VisualElements`类的实例，这其中包括已经有的控件，例如Label、Button、Toggle等，[控件参考]()。
 
 这也意味着，可以通过继承`VisualElements`类的方式来拓展出自己想要的控件。
 
@@ -98,9 +100,9 @@ public class Demo2 : EditorWindow
     // 以前是在ONGUI()函数中写，现在在OnEnable()中
     public void OnEnable()
     {
-        // 获取根节点
+        // 获取根元素
         VisualElement root = rootVisualElement;
-        // 使用代码的方式创建一个Label，并添加到root节点下
+        // 使用代码的方式创建一个Label，并添加到root元素下
         VisualElement label = new Label("Hello World! From C#");
         root.Add(label);
         // 可以试试:
@@ -144,9 +146,78 @@ public class MyWindow : EditorWindow  {
     }
 }
 ```
-##### 3. [UXML参考](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-ElementRef.html)
 
-##### 4. UQuery
+##### 3. UXML模板示例
+UXML模板是使用定义用户界面逻辑结构的XML标记编写的文本文件。下面的代码示例展示了如何定义一个提示用户做出选择的简单面板
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.Experimental.UIElements"
+    xsi:noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+    xsi:schemaLocation="UnityEngine.Experimental.UIElements ../UIElementsSchema/UnityEngine.Experimental.UIElements.xsd">
+
+    <engine:Label text="Select something to remove from your suitcase:"/>
+    <engine:Box>
+        <engine:Toggle name="boots" label="Boots" value="false" />
+        <engine:Toggle name="helmet" label="Helmet" value="false" />
+        <engine:Toggle name="cloak" label="Cloak of invisibility" value="false"/>
+    </engine:Box>
+    <engine:Box>
+        <engine:Button name="cancel" text="Cancel" />
+        <engine:Button name="ok" text="OK" />
+    </engine:Box>
+</engine:UXML>
+```
+
+- 文件的第一行是XML声明。声明是可选的，但是如果包含它，那么它必须在第一行，并且在它前面不能出现其他内容或空白。`version` 属性是必需的，但 `encoding` 编码是可选的。如果包含版本，则必须表示文件的字符编码。
+- 下一行定义文档根目录 `<UXML>`。`<UXML>` 元素包含名称空间前缀定义的属性和模式定义文件的位置。您可以不按部分顺序指定这些属性。
+- 在UIElements中，每个元素都在下面两个名称空间定义。
+    - `UnityEngine.Experimental.UIElements` ：包含定义为Unity运行时一部分的元素。
+    - `UnityEditor.Experimental.UIElements` ：包含Unity编辑器中可用的元素。要完全指定元素，必须在其名称空间前加上前缀。
+  
+###### namespace 名称空间操作
+
+一旦定义了这个缩短的前缀，文本 `<engine:button/>` 就相当于 `<unityengine.experimental.uielements:button/>`。 
+
+可以定义名称空间前缀。例如，行 `xmlns:engine="unityengine.experimental.uielements"` 将引擎前缀定义为与指定 `UnityEngine.Experimental.UIElements` 相同的前缀。
+
+如果您定义自己的元素，那么这些元素可能在它们自己的名称空间中定义。如果想在UXML模板中使用这些元素，必须在 `<UXML>` 标记中包含名称空间定义和模式文件位置，以及Unity名称空间。
+
+当你从 `Asset/Create/UIElements View` 菜单中创建一个新的UXML模板文件时，Unity编辑器自动帮你完成这些事。
+
+###### 
+
+元素名称（`name`）对应于要实例化的元素的C# class名。
+
+大多数元素都有属性，它们的值被映射到C#中相应的class属性。
+
+每个元素继承其父类类型的属性，可以向其添加自己的属性集。
+
+VisualElement是所有元素的基类，它为所有元素提供以下属性：
+
+- name名称：元素的标识符。名称应该是唯一的。
+  
+- picking-mode拾取模式：设置为响应鼠标事件的位置或忽略忽略鼠标事件的位置。
+  
+- focus-index焦距索引：用于确定制表时的焦距顺序。聚焦环（见聚焦环）
+  
+- class类：用空格分隔的标识符列表，用于描述元素的特征。使用类为元素指定视觉样式。还可以使用类在UQuery中选择一组元素。
+  
+- slot name和slot：slot充当放置方法，在实例化UXML组件时插入其他可视元素。请参见下面的插槽。
+  
+- tooltip工具提示：当鼠标悬停在元素上时显示为工具提示的字符串。
+
+
+重用UXML：
+
+```C#
+<engine:Template path="Assets/Portrait.uxml" name="Portrait">
+```
+
+##### 4. [UXML参考](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-ElementRef.html)
+
+##### 5. UQuery
 UQuery提供了一组扩展方法，用于从任何UIElements可视化树中检索元素。
 UQuery基于JQuery或Linq，但UQuery的设计目的是尽可能限制动态内存分配。
 这允许在moble平台上实现最佳性能。
