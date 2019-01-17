@@ -248,21 +248,21 @@ root.Query("foo").Children<Button>().ForEach(//do stuff);
 
 ## USS selectors
 
-##### Type
+#### Type
 `TypeName { ... }`
 
-##### Name
+#### Name
 `name { ... }`
 与 `VisualElement.name` 匹配，每个元素的名称都应该是独一无二的（来自官方的建议）。
 
-##### Class
+#### Class
 `.class { ... }`
 不能以数字开头。
 
-##### Wildcard
+#### Wildcard
 `* { ... }`
 
-##### Pseudo-states
+#### Pseudo-states
 `:pseudo-state { ... }`
 当元素进入特定状态时，使用伪状态来匹配它。
 例如，`Button:hover`匹配`Button`类型的视觉元素，但仅当用户将游标定位在视觉元素上时。
@@ -277,10 +277,10 @@ root.Query("foo").Children<Button>().ForEach(//do stuff);
 - checked : the visual element is a Toggle element and it is checked.
 伪状态是在其他简单选择器之后指定的。不能扩展伪状态。只有一组预定义的受支持的psuedo状态。
 
-##### Complex selectors 复杂选择器
+### Complex selectors 复杂选择器
 复杂选择器是带有分隔符的简单选择器的组合。复杂的选择器还包括选择器列表，这些选择器列表提供了对许多元素应用相同样式的简化方法。
 
-###### Delimiters 分隔符
+### Delimiters 分隔符
 UIElements支持以下分隔符：
 - 空(或空格)分隔符匹配元素的所有后代。
 - 大于号(`>`)匹配由前面的选择器匹配的元素的直接子代视觉元素。
@@ -289,14 +289,14 @@ Example：
 - #container1 .yellow : 匹配内部元素和第一个按钮。
 - #container2 > .yellow : 只匹配内部元素。
 
-##### Selector List 选择器列表
+### Selector List 选择器列表
 使用选择器列表对许多元素应用相同的样式定义。每个选择器由逗号分隔，每个选择器可以是简单的或复杂的选择器。
 Example:
 `#container1, Button { padding-top:10 }`
 is the same as:
 `#container1 { padding-top: 10 } Button { padding-top: 10}`
 
-##### Selector precedence 选择优先级
+### Selector precedence 选择优先级
 如果多个选择器匹配相同的元素，则具有最高专一性的选择器优先。对于简单的选择器，基本的特异性规则是：
 - Name is more specific than,
 - Class, which is more specific than,
@@ -313,7 +313,7 @@ is the same as:
 
 C#中设置的值具有最高的 specificity
 
-### 属性类型
+## 属性类型
 
 ##### 内置vs自定义属性
 
