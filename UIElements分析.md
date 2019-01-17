@@ -126,6 +126,7 @@ public class Demo2 : EditorWindow
 ```
 
 ---
+---
 
 # UXML
 ##### 1. 自定义VisualElement
@@ -247,6 +248,7 @@ root.Query("foo").Children<Button>().ForEach(//do stuff);
 ```
 
 ---
+---
 
 # USS (Unity style sheets)
 
@@ -339,6 +341,7 @@ USS可以使用以下格式读取文件夹中的资源显示：
 
 对于纹理，如果一个文件有一个后缀为 `@2x` 的版本，这个文件会自动加载 retina 或高DPI屏幕。
 
+---
 ---
 
 # Event
