@@ -245,7 +245,37 @@ root.Query<Button>("foo").First();
 ```C#
 root.Query("foo").Children<Button>().ForEach(//do stuff);
 ```
-### USS
+### USS (Unity style sheets)
+
+
+##### Type
+`TypeName { ... }`
+
+##### Name
+`name { ... }`
+与 `VisualElement.name` 匹配，每个元素的名称都应该是独一无二的（来自官方的建议）。
+
+##### Class
+`.class { ... }`
+不能以数字开头。
+
+##### Wildcard
+`* { ... }`
+
+##### Pseudo-states
+`:pseudo-state { ... }`
+当元素进入特定状态时，使用伪状态来匹配它。
+例如，`Button:hover`匹配`Button`类型的视觉元素，但仅当用户将游标定位在视觉元素上时。
+包含以下状态：
+- hover : the cursor is hovering over the visual element.
+- active : the visual element is being interacted with.
+- inactive : the visual element is no longer being interacted with.
+- focus : the visual element has focus.
+- selected : unused.
+- disabled : the visual element is set to enabled == false.
+- enabled : the visual element is set to enable == true.
+- checked : the visual element is a Toggle element and it is checked.
+伪状态是在其他简单选择器之后指定的。不能扩展伪状态。只有一组预定义的受支持的psuedo状态。
 
 ### Event
 
