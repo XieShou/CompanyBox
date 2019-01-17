@@ -43,7 +43,8 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 > PS：个人猜测官网希望的正常开发流程：
 > 1. 通过加载UXML文件创建出视觉树中的各元素。
 > 2. 将USS文件中的style应用到视觉树中的最上层root元素，style会自动向下同步。
-> 3. 而C#更多的负责UXML、USS配置文件的加载和逻辑的处理，而不是创建元素和元素的布局。
+> 3. 通过 `Query` 可以指定 `name` 和指定组件类型，从而获取到一棵视觉树中特定的组件。
+> 4. 而C#更多的负责UXML、USS配置文件的加载和逻辑的处理，而不是创建元素和元素的布局。
 
 #### 2. 视觉树
 首先，从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
@@ -216,6 +217,15 @@ VisualElement是所有元素的基类，它为所有元素提供以下属性：
 ```
 
 ##### 4. [UXML参考](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-ElementRef.html)
+内置的标准控件
+- Button
+- Contextual menu
+- EditorTextField
+- Label
+- ScrollView
+- TextField
+- Toggle
+
 
 ##### 5. UQuery
 UQuery提供了一组扩展方法，用于从任何UIElements可视化树中检索元素。
@@ -236,3 +246,44 @@ root.Query<Button>("foo").First();
 root.Query("foo").Children<Button>().ForEach(//do stuff);
 ```
 ### USS
+
+### Event
+
+UIElements 事件通知是使用深度优先搜索，所以会有两个阶段
+- trickle down 
+- bubble up
+
+响应事件的两种方式：
+- 可以通过注册Event的CallBack。
+- 通过实现默认操作。
+
+`PreventDefault()`：用来取消事件响应的默认操作
+
+##### Synthesizing Events 合成事件
+UIElements使用事件池来避免重复分配事件对象。要合成和发送您自己的事件，您应该按照相同的步骤分配和发送事件
+- 从事件池中获取事件对象。
+- 填写事件属性。
+- 将事件封装在 `using` 块中，以确保将其返回到事件池。
+- 将事件传递给 `element.SendEvent()`。
+
+
+下面的示例演示如何合成和发送事件：
+```C#
+void SynthesizeAndSendKeyDownEvent(IPanel panel, KeyCode code,
+     char character = '\0', EventModifiers modifiers = EventModifiers.None)
+{
+    // Create a UnityEngine.Event to hold initialization data.
+    // Also, this event will be forwarded to IMGUIContainer.m_OnGUIHandler
+    var evt = new Event() {
+        type = EventType.KeyDownEvent,
+        keyCode = code,
+        character = character,
+        modifiers = modifiers
+    };
+
+    using (KeyDownEvent keyDownEvent = KeyDownEvent.GetPooled(evt))
+    {
+        UIElementsUtility.eventDispatcher.DispatchEvent(keyDownEvent, panel);
+    }
+}
+```
