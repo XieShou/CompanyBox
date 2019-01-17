@@ -77,7 +77,7 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 ![UIElement Editor Window](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElement%20Editor%20Window.png)
 
 ---
-### C#
+# C#
 ##### 开始
 根据上面的步骤，创建了一个文件名为Demo2的示例，自动弹出窗口如下图：
 
@@ -125,7 +125,7 @@ public class Demo2 : EditorWindow
 }
 ```
 
-### UXML
+# UXML
 ##### 1. 自定义VisualElement
 
 [官方传送门](https://docs.unity3d.com/2019.1/Documentation/Manual/UIE-UXML.html)
@@ -187,8 +187,6 @@ UXML模板是使用定义用户界面逻辑结构的XML标记编写的文本文�
 
 当你从 `Asset/Create/UIElements View` 菜单中创建一个新的UXML模板文件时，Unity编辑器自动帮你完成这些事。
 
-###### 
-
 元素名称（`name`）对应于要实例化的元素的C# class名。
 
 大多数元素都有属性，它们的值被映射到C#中相应的class属性。
@@ -245,7 +243,8 @@ root.Query<Button>("foo").First();
 ```C#
 root.Query("foo").Children<Button>().ForEach(//do stuff);
 ```
-### USS (Unity style sheets)
+
+# USS (Unity style sheets)
 
 
 ##### Type
@@ -277,7 +276,7 @@ root.Query("foo").Children<Button>().ForEach(//do stuff);
 - checked : the visual element is a Toggle element and it is checked.
 伪状态是在其他简单选择器之后指定的。不能扩展伪状态。只有一组预定义的受支持的psuedo状态。
 
-### Event
+# Event
 
 UIElements 事件通知是使用深度优先搜索，所以会有两个阶段
 - trickle down 
