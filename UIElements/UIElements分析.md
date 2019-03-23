@@ -50,7 +50,7 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 #### 2. 视觉树
 首先，从编辑器界面任一个窗口的右上角的下拉选项中打开 **`UIElements Debugger`** 窗口，如图。
 
-![UIElements Debugger窗口](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElements%20Debugger.png)
+![UIElements Debugger窗口](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElements/Textures/UIElements%20Debugger.png)
 
 用户界面的定义在根目录中。UI定义是一系列嵌套的XML元素，每个元素表示一个VisualElement。
 
@@ -64,25 +64,25 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 
 尝试修改官方案例 **Example_3** 的代码，用`VisualElements`替换`VisualContainer`，如下图32、33行，
 
-![修改代码](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/Example_3.png)
+![修改代码](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElements/Textures/Example_3.png)
 
 可以在Debugger窗口中看到下图中的树状结构。
 
-![Example_3 Tree](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/Example_3_tree.png)
+![Example_3 Tree](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElements/UIElements/Textures/Example_3_tree.png)
 
 #### 3. 快速开始：UIElement Editor Window ~~~
 在`Assets`文件夹的目录下创建一个Editor文件夹，Unity将自动检测到这个文件夹。
 
 可以在 **Project** 窗口的 **Create** 中找到 **UIElement Editor Window**，在文本框输入文件名后，就会在Editor文件夹目录下创建 `.cs`、`.uxml`、`.uss`三个文件。
 
-![UIElement Editor Window](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/UIElement%20Editor%20Window.png)
+![UIElement Editor Window](https://raw.githubusercontent.com/XieShou/CompanyBox/master//UIElementsTextures/UIElement%20Editor%20Window.png)
 
 ---
 # C#
 ##### 开始
 根据上面的步骤，创建了一个文件名为Demo2的示例，自动弹出窗口如下图：
 
-![Hello World](https://raw.githubusercontent.com/XieShou/CompanyBox/master/Textures/HelloWorld.png)
+![Hello World](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElements/Textures/HelloWorld.png)
 
 自动生成的代码如下：
 ```c#
