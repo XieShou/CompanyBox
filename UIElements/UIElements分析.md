@@ -68,14 +68,14 @@ Unity的UIElements是Unity官方新开发的UI工具，旨在整合原先的IMGU
 
 可以在Debugger窗口中看到下图中的树状结构。
 
-![Example_3 Tree](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElements/UIElements/Textures/Example_3_tree.png)
+![Example_3 Tree](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElements/Textures/Example_3_tree.png)
 
 #### 3. 快速开始：UIElement Editor Window ~~~
 在`Assets`文件夹的目录下创建一个Editor文件夹，Unity将自动检测到这个文件夹。
 
 可以在 **Project** 窗口的 **Create** 中找到 **UIElement Editor Window**，在文本框输入文件名后，就会在Editor文件夹目录下创建 `.cs`、`.uxml`、`.uss`三个文件。
 
-![UIElement Editor Window](https://raw.githubusercontent.com/XieShou/CompanyBox/master//UIElementsTextures/UIElement%20Editor%20Window.png)
+![UIElement Editor Window](https://raw.githubusercontent.com/XieShou/CompanyBox/master/UIElementsTextures/UIElement%20Editor%20Window.png)
 
 ---
 # C#
