@@ -12,6 +12,8 @@ C#版的ECS框架，有Unity版本。
 
 所有Entity实现接口IEntity。
 
+---
+
 `public interface IEntity : IAERC{ /*逻辑*/ }`
 
 ```C#
@@ -22,9 +24,11 @@ public interface IAERC{
 }
 ```
 
- **Entity ** : `public class Entity : IEntity`
+---
 
-包含三个委托事件对应组件的`Add`、`Removed`、`Replaced`。
+ Entity  : `public class Entity : IEntity`
+
+包含三个事件对应组件的`Add`、`Removed`和`Replaced`行为。
 
 `public int creationIndex` : 每个Entity的专属ID
 
@@ -38,7 +42,7 @@ public interface IAERC{
 
 4. `public IComponent GetComponent(int index) { /*逻辑*/ }`
 
-在添加、移除、替换和获取组件的时候，都使用了一个`index`字段，在Entitas中这是每个Component的唯一标识。
+在添加、移除、替换和获取组件的时候，都使用了一个`index`字段，在Entitas中这是每个Component的唯一标识。同时会向对应事件添加此次操作行为。
 
 ## Component
 
@@ -90,7 +94,9 @@ public class Systems : IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearD
 
 #### 7. `public abstract class JobSystem<TEntity> : IExecuteSystem where TEntity : class, IEntity { /*逻辑*/ }`
 
-Entitas中的JobSystem，开发者注释提示不能在该System中进行组件的Add和Replace，感觉没什么用。
+JobSystem使用实体的子集调用`Execute(entities)`，并将工作负载分配给指定数量的线程。
+
+在Entitas中编写多线程代码时，不要使用生成的方法，如`AddXyz()`和`ReplaceXyz()`。
 
 #### 8. `public abstract class MultiReactiveSystem<TEntity, TContexts> : IReactiveSystem where TEntity : class, IEntity where TContexts : class, IContexts`
 
@@ -99,3 +105,23 @@ Entitas中的JobSystem，开发者注释提示不能在该System中进行组件�
 如果存在基于指定收集器的更改，则reactiveSystem将调用`Execute(entities)`，并且只传入更改的实体。一个常见的用例是对变化做出反应，例如改变实体的位置以更新相关游戏对象的gameobject.transform.position。
 
 ## Matcher
+
+**匹配器**，作为一种分组工具。
+
+成员函数：`AllOf()`、`AnyOf()`、`NoneOf()`
+
+通过匹配器的这三种成员函数的多种组合，可以获得不同的`Components`的组合方式。
+
+## Group
+
+Group即为能通过某个`Matcher`的`Entity`的集合。
+
+其中也包含了`Added`、`Removed`和`Updated`三种针对组中Entity的操作事件。
+
+PS：个人感觉这里跟`ReactiveSystem`的响应有关系。
+
+
+
+
+
+
