@@ -34,13 +34,14 @@ public interface IAERC{
 
 组件操作：
 
-1. `public void AddComponent(int index, IComponent component) { /*逻辑*/ }`
+```C#
+1. public void AddComponent(int index, IComponent component) { /*逻辑*/ }
+2. public void RemoveComponent(int index) { /*逻辑*/ }
+3. public void ReplaceComponent(int index, IComponent component) { /*逻辑*/ }
+4. public IComponent GetComponent(int index) { /*逻辑*/ }
+```
 
-2. `public void RemoveComponent(int index) { /*逻辑*/ }`
 
-3. `public void ReplaceComponent(int index, IComponent component) { /*逻辑*/ }`
-
-4. `public IComponent GetComponent(int index) { /*逻辑*/ }`
 
 在添加、移除、替换和获取组件的时候，都使用了一个`index`字段，在Entitas中这是每个Component的唯一标识。同时会向对应事件添加此次操作行为。
 
@@ -116,7 +117,14 @@ JobSystem使用实体的子集调用`Execute(entities)`，并将工作负载分�
 
 Group即为能通过某个`Matcher`的`Entity`的集合。
 
-其中也包含了`Added`、`Removed`和`Updated`三种针对组中Entity的操作事件。
+其中也包含了三种针对组中Entity的操作事件。
+
+```C#
+1. public event GroupChanged<TEntity> OnEntityAdded;
+2. public event GroupChanged<TEntity> OnEntityRemoved;
+
+3. public event GroupUpdated<TEntity> OnEntityUpdated
+```
 
 PS：个人感觉这里跟`ReactiveSystem`的响应有关系。
 
