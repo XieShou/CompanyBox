@@ -72,7 +72,9 @@ public interface IAERC{
 
 **统一管理器**：
 
-`public class Systems : IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem { /*逻辑*/ }`
+```C#
+public class Systems : IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem { /*逻辑*/ }
+```
 
 该类中包含四个List，分别对应`IInitializeSystem`、`IExecuteSystem`、`ICleanupSystem`、`ITearDownSystem`。
 
