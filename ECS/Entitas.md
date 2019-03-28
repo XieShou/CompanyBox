@@ -35,10 +35,10 @@ public interface IAERC{
 组件操作：
 
 ```C#
-1. public void AddComponent(int index, IComponent component) { /*逻辑*/ }
-2. public void RemoveComponent(int index) { /*逻辑*/ }
-3. public void ReplaceComponent(int index, IComponent component) { /*逻辑*/ }
-4. public IComponent GetComponent(int index) { /*逻辑*/ }
+1. public void AddComponent(int index, IComponent component) { /*逻辑*/ };
+2. public void RemoveComponent(int index) { /*逻辑*/ };
+3. public void ReplaceComponent(int index, IComponent component) { /*逻辑*/ };
+4. public IComponent GetComponent(int index) { /*逻辑*/ };
 ```
 
 
@@ -123,7 +123,7 @@ Group即为能通过某个`Matcher`的`Entity`的集合。
 1. public event GroupChanged<TEntity> OnEntityAdded;
 2. public event GroupChanged<TEntity> OnEntityRemoved;
 
-3. public event GroupUpdated<TEntity> OnEntityUpdated
+3. public event GroupUpdated<TEntity> OnEntityUpdated;
 ```
 
 PS：个人感觉这里跟`ReactiveSystem`的响应有关系。
