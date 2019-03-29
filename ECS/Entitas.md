@@ -41,8 +41,6 @@ public interface IAERC{
 4. public IComponent GetComponent(int index) { /*逻辑*/ };
 ```
 
-
-
 在添加、移除、替换和获取组件的时候，都使用了一个`index`字段，在Entitas中这是每个Component的唯一标识。同时会向对应事件添加此次操作行为。
 
 ## Component
@@ -122,14 +120,7 @@ Group即为能通过某个`Matcher`的`Entity`的集合。
 ```C#
 1. public event GroupChanged<TEntity> OnEntityAdded;
 2. public event GroupChanged<TEntity> OnEntityRemoved;
-
 3. public event GroupUpdated<TEntity> OnEntityUpdated;
 ```
 
 PS：个人感觉这里跟`ReactiveSystem`的响应有关系。
-
-
-
-
-
-
