@@ -124,3 +124,24 @@ Group即为能通过某个`Matcher`的`Entity`的集合。
 ```
 
 PS：个人感觉这里跟`ReactiveSystem`的响应有关系。
+
+## Feature
+
+`Feature`是用来组织和管理Systems的，使用`Feature`来管理系统将可以形成一个树状结构。
+
+通过将数个`System`添加进入一个`Feature`，这个`Feature`将成为这些System的父级。
+
+```C#
+using Entitas;
+
+public class TutorialSystems : Feature
+{
+    public TutorialSystems(Contexts contexts) : base ("Tutorial Systems")
+    {
+        Add(new HelloWorldSystem(contexts));
+        Add(new DebugMessageSystem(contexts));
+    }
+}
+```
+
+
