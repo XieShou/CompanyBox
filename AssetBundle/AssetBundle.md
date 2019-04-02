@@ -1,4 +1,4 @@
-# AssetBundle
+﻿# AssetBundle
 
 AssetBundle能够让程序在运行时动态的加载资源。AssetBundle是通过BuildPipeline.BuildAssetBundle创建的。
 
@@ -55,7 +55,9 @@ AB包自身保存着互相的依赖关系。
 
 三种主要的压缩选项：
 
-- BuildAssetBundleOptions.None: 
+- ```C# 
+  BuildAssetBundleOptions.None
+  ```
 
   这个打包选项使用LZMA格式压缩。
 
@@ -63,11 +65,15 @@ AB包自身保存着互相的依赖关系。
 
   当解压缩包后，它将使用LZ4格式重新再磁盘上重新压缩，通过UnityWebRequestAssetBundle加载的LZMA压缩资产包被自动重新压缩为LZ4压缩，并缓存在本地文件系统中。
 
-- BuildAssetBundleOptions.UncompressedAssetBundle: 
+- ```C#
+  BuildAssetBundleOptions.UncompressedAssetBundle
+  ```
 
   以完全不压缩的方式构建这些资源，占用空间大，但加载速度快很多。
 
-- BuildAssetBundleOptions.ChunkBasedCompression: 
+- ```C# 
+  BuildAssetBundleOptions.ChunkBasedCompression
+  ```
 
   - LZ4压缩。
   - 占用空间比LZMA大。
