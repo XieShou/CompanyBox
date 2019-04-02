@@ -26,9 +26,7 @@ ECS系统的逻辑部分不存在继承的概念。
 
 - ECS中是面向数据，`Entity`（实体）包含了其拥有的`Components`（组件数据），并不具有任何行为逻辑。为了实现逻辑就添加一个`System`（系统），=系统会对符合`Component`组过滤条件的`Entity`进行逻辑处理，通常结果都是增删改`Component`数据。
 
-## 特点
-
-#### 1. 思想
+## 思想
 
 思想是ECS模式的核心，从框架到前端开发再到策划。
 
@@ -36,30 +34,24 @@ ECS系统的逻辑部分不存在继承的概念。
 - 低耦合，例如在处理玩家角色的逻辑时，往往特别复杂，在ECS框架下可以将玩家角色的行为细化为多个System，让多人并行开发，每个System的作用大多都是让增删改玩家角色Entity身上的Component数据。而且每个System关心的Component通常并不相同，所以如果逻辑出了Bug可以很容易定位到问题代码段。
 - 在后期需要修改逻辑时，根据功能点细化的粒度找到处理对应逻辑的System进行修改即可。
 
-#### 2. 内存连续
+## Entitas与Entities的区别
+
+`Entitas`和`Entities`都是Unity中可以使用的ECS框架。
+
+#### Entitas
+
+框架精炼且完善，作为一款第三方插件可以实现代码的移植。
+
+#### Entities
+
+作为官方出品的ECS框架拥有很多Entitas做不到的优化，性能直接得到了提升，但却造成了与引擎的高耦合。
+
+1. 内存连续
 
 Unity的ECS框架实现的内存连续，使用基于Chunk迭代的NativeArray数组装Component，是一种对内存友好的数据结构，在使用的时候由于粒度很细直接提升了***Cache Hit***，从而提升性能。
 
 从操作系统批量申请内存，提前为Component申请额外的空间。
 
-#### 3. 多线程
+2. 多线程
 
 Unity的ECS框架实现的JobSystem的调度系统，实现了一套Unity环境下的ECS多线程功能，按照JobSystem的代码规范进行编程，能很方便、安全的使用多线程。其中多线程需要设置Schedule的数量，一般为64。
-
-## 框架
-
-- Entitas
-
-  一款第三方插件，在Github开源，有基于Unity的版本，普通版可以直接下载，付费版在AssetStore购买下载。
-
-- Entities
-
-  Unity官方的ECS框架，作为一个Package存在。
-
-  附带的有其他很多Package作为拓展和辅助功能：
-
-  1. *JobSystem*
-
-  2. *Brust*
-
-  3. 数学库
