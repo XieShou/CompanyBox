@@ -1,4 +1,4 @@
-# ECS
+﻿# ECS
 
 ## 简介
 
@@ -19,6 +19,12 @@ ECS即为Entity Component System的简称，是区别于传统OOP开发的一种
   2. System根据Entity身上的各个Component包含的数据进行逻辑运算，运算的结果通常是在该Entity上Add、Replace、Remove Compoent数据。
 
 ECS系统的逻辑部分不存在继承的概念。
+
+## ECS和传统OOP区别
+
+- OOP是面向对象，对象包含了属性、方法，并且通常进行了继承并且重写，从而形成一个独立的对象。
+
+- ECS中是面向数据，`Entity`（实体）包含了其拥有的`Components`（组件数据），并不具有任何行为逻辑。为了实现逻辑就添加一个`System`（系统），=系统会对符合`Component`组过滤条件的`Entity`进行逻辑处理，通常结果都是增删改`Component`数据。
 
 ## 特点
 
@@ -57,9 +63,3 @@ Unity的ECS框架实现的JobSystem的调度系统，实现了一套Unity环境�
   2. *Brust*
 
   3. 数学库
-
- 
-
-
-
-      
