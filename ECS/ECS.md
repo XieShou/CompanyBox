@@ -50,8 +50,6 @@ ECS系统的逻辑部分不存在继承的概念。
 
 Unity的ECS框架实现的内存连续，使用基于Chunk迭代的NativeArray数组装Component，是一种对内存友好的数据结构，在使用的时候由于粒度很细直接提升了***Cache Hit***，从而提升性能。
 
-从操作系统批量申请内存，提前为Component申请额外的空间。
-
 2. 多线程
 
-Unity的ECS框架实现的JobSystem的调度系统，实现了一套Unity环境下的ECS多线程功能，按照JobSystem的代码规范进行编程，能很方便、安全的使用多线程。其中多线程需要设置Schedule的数量，一般为64。
+Unity的ECS框架实现的JobSystem，实现了基于ECS的多线程，按照JobSystem的代码规范进行编程，能很方便、安全的使用多线程。
