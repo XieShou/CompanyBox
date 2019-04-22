@@ -24,7 +24,7 @@ ECS系统的逻辑部分不存在继承的概念。
 
 - OOP是面向对象，对象包含了属性、方法，并且通常进行了继承并且重写，从而形成一个独立的对象。
 
-- ECS中是面向数据，`Entity`（实体）包含了其拥有的`Components`（组件数据），并不具有任何行为逻辑。为了实现逻辑就添加一个`System`（系统），=系统会对符合`Component`组过滤条件的`Entity`进行逻辑处理，通常结果都是增删改`Component`数据。
+- ECS中是面向数据，`Entity`（实体）包含了其拥有的`Components`（组件数据），并不具有任何行为逻辑。为了实现逻辑就添加一个`System`（系统），系统会对符合`Component`组过滤条件的`Entity`进行逻辑处理，通常结果都是增删改`Component`数据。
 
 ## 思想
 
@@ -53,3 +53,9 @@ Unity的ECS框架实现的内存连续，使用基于Chunk迭代的NativeArray�
 2. 多线程
 
 Unity的ECS框架实现的JobSystem，实现了基于ECS的多线程，按照JobSystem的代码规范进行编程，能很方便、安全的使用多线程。
+
+   3. Burst编译器优化
+
+
+
+
