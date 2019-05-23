@@ -35,7 +35,8 @@ IComponent = { index = nil }
 ### 3. System
 
 ```lua
-local ISystem = { ecs_system_type = ECS_SYSTEM_TYPE.InitializeSystem or ECS_SYSTEM_TYPE.ExecuteSystem or ECS_SYSTEM_TYPE.CleanupSystem or ECS_SYSTEM_TYPE.TearDownSystem}
+local ISystem = { index = nil,
+ecs_system_type = ECS_SYSTEM_TYPE.InitializeSystem or ECS_SYSTEM_TYPE.ExecuteSystem or ECS_SYSTEM_TYPE.CleanupSystem or ECS_SYSTEM_TYPE.TearDownSystem}
 local IInitializeSystem : ISystem { void Initialize(); }
 local IExecuteSystem : ISystem { void Execute(); }
 local ICleanupSystem : ISystem { void Cleanup(); }
@@ -79,16 +80,50 @@ local ITearDownSystem : ISystem { void TearDown(); }
 ### 8. World
 
 ```lua
+local ECS_SYSTEM_BUFFER = {}
+local ECS_SYSTEM_FILE_PATH = { --需要加载的System的路径 }
+
 function WORLD:ADD(system)
     if system and system.ecs_system_type then
         local type = system.ecs_system_type
-        if type = ECS_SYSTEM_TYPE.InitializeSystem then
-        elseif type = ECS_SYSTEM_TYPE.ExecuteSystem then
-        elseif type = ECS_SYSTEM_TYPE.CleanupSystem then
-        elseif type = ECS_SYSTEM_TYPE.TearDownSystem then
-        end
+        ECS_SYSTEM_BUFFER[type][system.index] = system
     end
 end
+
+function WORLD:Initialize()
+    --创建system集合
+    for i,v in pairs(ECS_SYSTEM_TYPE) do
+        ecs_system_buffer[v] = {}
+    end
+    --根据路径require加载system
+    for i,v in pairs(ECS_SYSTEM_FILE_PATH) do
+        local system = require(v)
+        self:ADD(system)
+    end
+    --调用Initialize的System
+    for index,system in pairs(ECS_SYSTEM_BUFFER[ECS_SYSTEM_TYPE.Initialize_SYSTEM]) do
+        system:Initialize()
+    end
+end
+
+function WORLD:Execute()
+    for index,system in pairs(executeSystem_list) do
+        system:Execute()
+    end
+end
+
+function WORLD:Cleanup()
+    for index,system in pairs(cleanupSystem_list) do
+        system:Cleanup()
+    end
+end
+
+function WORLD:TearDown()
+    for index,system in pairs(tearDownSystem_list) do
+        system:TearDown()
+    end
+end
+
 ```
 
 ---
